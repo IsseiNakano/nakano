@@ -9,7 +9,6 @@ final int maxint = 99999 ;
 boolean negativeobj[] = new boolean[objective] ;
 PathVec sss = new PathVec() ;
 
-
 void setup() {
   // dir = "../../data/" ;
   int[] m = {0,1,2} ;

@@ -69,15 +69,12 @@ class Vector {
     return true ;
   }
   boolean domi(int[] u) {
-    for(Vector v = follow ; v != this ; v = v.follow)
-      if(!v.domimi(u)) return false ;
+    for (Vector v = follow ; v != this ; v = v.follow) {
+      int status = v.dominate(u) ;
+      if (status == 1) return false ;
+      if (status == 2) v.remove() ;
+    }
     return true ;
-  }
-  boolean domimi(int[] u) {
-    for(int i = 0 ; i < objective ; i++)
-      if(pathweight[i] > u[i])
-        return true ;
-    return false ;
   }
 }
 
@@ -109,10 +106,11 @@ class PathVec {
     boolean flag = false ;
     for(Vector s = pps.upd.follow ; s != pps.upd ; s = s.follow) {
       int[] path = s.calculation(w[pps.index]) ;
-      // if (minis.domi(path))
+      if (minis.domi(path))
       if (dummy.check(path))
       if (upd.check(path))
       if (vs.check(path)) {
+        // solutionin++ ;
         vs.add(new Vector(path)) ;
         flag = true ;
       }
