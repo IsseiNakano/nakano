@@ -1,3 +1,4 @@
+
 // class Vector {
 //   int[] pathweight ;
 //   Vector pre ;
