@@ -7,11 +7,12 @@ final int objective = 3 ;
 final int experimentNum = 10 ;
 final int maxint = 99999 ;
 boolean negativeobj[] = new boolean[objective] ;
+PathVec sss = new PathVec() ;
 
- void setup() {
+void setup() {
   // dir = "../../data/" ;
   int[] m = {0,1,2} ;
   ParetoSolution p = new ParetoSolution(m) ;
   p.update() ;
   exit() ;
- }
+}
