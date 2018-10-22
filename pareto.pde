@@ -28,7 +28,7 @@ class ParetoSolution {
       vs.reset() ;
     }
   }
-   void update() {
+  void update() {
     int time = Integer.MAX_VALUE ; ;
     for(int i = 0 ; i < experimentNum ; i++) {
       int times = bellmanford() ;
@@ -37,6 +37,27 @@ class ParetoSolution {
     }
     println(leng()+","+time) ;
   }
+  void update1() {
+    int time = Integer.MAX_VALUE ; ;
+    int times = bellmanford1() ;
+    println(inpath) ;
+  }
+  int bellmanford1() {
+   reset() ;
+   int start = millis() ;
+   pareto[0].upd.add(new Vector(new int[objective])) ;
+   boolean flag = true ;
+   while(flag) {
+     flag = false ;
+     for(PathVec ps : pareto)
+       for(PathVec pps : pareto)
+         if(ps.index != pps.index)
+         if(ps.paretoConstruction1(pps)) flag = true ;
+     for(PathVec ps : pareto)
+       ps.update() ;
+   }
+   return millis() - start ;
+ }
    int leng() {
     int count = 0 ;
     for(PathVec ps : pareto)
@@ -80,25 +101,4 @@ class ParetoSolution {
     }
     return weight ;
   }
-  void update1() {
-    int time = Integer.MAX_VALUE ; ;
-    int times = bellmanford1() ;
-    println(inpath) ;
-  }
-  int bellmanford1() {
-   reset() ;
-   int start = millis() ;
-   pareto[0].upd.add(new Vector(new int[objective])) ;
-   boolean flag = true ;
-   while(flag) {
-     flag = false ;
-     for(PathVec ps : pareto)
-       for(PathVec pps : pareto)
-         if(ps.index != pps.index)
-         if(ps.paretoConstruction1(pps)) flag = true ;
-     for(PathVec ps : pareto)
-       ps.update() ;
-   }
-   return millis() - start ;
- }
  }

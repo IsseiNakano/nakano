@@ -51,7 +51,7 @@ class Vector {
   boolean check(int[] u) {
     for (Vector v = follow ; v != this ; v = v.follow) {
       int status = v.dominate(u) ;
-      if (status <= 1) return false ;
+      if (status == 1) return false ;
       if (status == 2) v.remove() ;
     }
     return true ;
@@ -88,6 +88,20 @@ class Vector {
     }
     return flag ;
   }
+  boolean paretoConstruction1(PathVec pps) {
+    boolean flag = false ;
+    for(Vector s = pps.upd.follow ; s != pps.upd ; s = s.follow) {
+      int[] path = s.calculation(w[pps.index]) ;
+      if (dummy.check(path))
+      if (upd.check(path))
+      if (vs.check(path)) {
+        vs.add(new Vector(path)) ;
+        inpath++ ;
+        flag = true ;
+      }
+    }
+    return flag ;
+  }
   int leng() {
     int count = 0 ;
     for(Vector s = dummy.follow ; s != dummy ; s = s.follow)
@@ -108,19 +122,5 @@ class Vector {
     dummy.clear() ;
     upd.clear() ;
     vs.clear() ;
-  }
-  boolean paretoConstruction1(PathVec pps) {
-    boolean flag = false ;
-    for(Vector s = pps.upd.follow ; s != pps.upd ; s = s.follow) {
-      int[] path = s.calculation(w[pps.index]) ;
-      if (dummy.check(path))
-      if (upd.check(path))
-      if (vs.check(path)) {
-        vs.add(new Vector(path)) ;
-        inpath++ ;
-        flag = true ;
-      }
-    }
-    return flag ;
   }
 }
