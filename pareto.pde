@@ -10,16 +10,17 @@ class ParetoSolution {
    int bellmanford() {
     reset() ;
     int start = millis() ;
-    pareto[0].upd.add(new Vector(new int[objective])) ;
+    pareto[0].add(new int[objective]) ;
+    pareto[0].update = true ;
     boolean flag = true ;
     while(flag) {
       flag = false ;
-      for(PathVec ps : pareto)
+      for(PathVec ps : pareto) {
         for(PathVec pps : pareto)
           if(ps.index != pps.index)
           if(ps.paretoConstruction(pps)) flag = true ;
-      for(PathVec ps : pareto)
-        ps.update() ;
+        ps.update = false ;
+      }
     }
     return millis() - start ;
   }
@@ -28,7 +29,7 @@ class ParetoSolution {
       vs.reset() ;
     }
   }
-  void update() {
+   void update() {
     int time = Integer.MAX_VALUE ; ;
     for(int i = 0 ; i < experimentNum ; i++) {
       int times = bellmanford() ;
@@ -37,27 +38,6 @@ class ParetoSolution {
     }
     println(leng()+","+time) ;
   }
-  void update1() {
-    int time = Integer.MAX_VALUE ; ;
-    int times = bellmanford1() ;
-    println(inpath) ;
-  }
-  int bellmanford1() {
-   reset() ;
-   int start = millis() ;
-   pareto[0].upd.add(new Vector(new int[objective])) ;
-   boolean flag = true ;
-   while(flag) {
-     flag = false ;
-     for(PathVec ps : pareto)
-       for(PathVec pps : pareto)
-         if(ps.index != pps.index)
-         if(ps.paretoConstruction1(pps)) flag = true ;
-     for(PathVec ps : pareto)
-       ps.update() ;
-   }
-   return millis() - start ;
- }
    int leng() {
     int count = 0 ;
     for(PathVec ps : pareto)
@@ -71,20 +51,7 @@ class ParetoSolution {
       for(int i = 0 ; i < nodenum ; i++){
         String[] values = split(lines[i], ",") ;
         for(int j = 0 ; j < nodenum ; j++) {
-          weight[j][i][k] = int(values[j]) ;
-        }
-      }
-    }
-    return weight ;
-  }
-   int[][][] instanceTextF(int[] m) {
-    int[][][] weight = new int[nodenum][nodenum][objective] ;
-    for (int k = 0 ; k < m.length ; k++) {
-      String[] lines = loadStrings(dirF + "cost" + m[k] + ".csv");
-      for(int i = 0 ; i < nodenum ; i++){
-        String[] values = split(lines[i], ",") ;
-        for(int j = 0 ; j < nodenum ; j++) {
-          weight[j][i][k] = int(values[j]) ;
+          weight[i][j][k] = int(values[j]) ;
         }
       }
     }
