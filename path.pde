@@ -2,12 +2,14 @@ class Vector {
   int[] pathweight ;
   Vector pre ;
   Vector follow ;
+  int index ;
   Vector() {
     pre = this ;
     follow = this ;
   }
-  Vector(int[] weight) {
+  Vector(int[] weight , int ind) {
     pathweight = weight ;
+    index = ind ;
   }
   void add(Vector a) {
     a.pre = this ;
@@ -26,12 +28,6 @@ class Vector {
   boolean isEmpty(){
     return follow == this ;
   }
-  void addAll(Vector a, Vector b) {
-    pre.follow = a ;
-    a.pre = pre ;
-    pre = b ;
-    b.follow = this ;
-  }
   int[] calculation(int[] weight) {
     int[] value = new int[objective];
     for(int i = 0 ; i < objective ; i++)
@@ -48,51 +44,21 @@ class Vector {
     }
     return status ;
   }
-}
- class PathVec {
-  Vector dummy ;
-  int index ;
-  int[][] w ;
-  boolean update ;
-  PathVec() {
-  }
-  PathVec(int i, int[][] wei) {
-    index = i ;
-    w = wei ;
-    dummy = new Vector() ;
-  }
-  void add(int[] wei) {
-    dummy.pre.add(new Vector(wei)) ;
-  }
-  boolean paretoConstruction(PathVec pps) {
-    if(!update) return false ;
-    boolean flag = false ;
-    for(Vector s = dummy.follow ; s != dummy ; s = s.follow) {
-      int[] path = s.calculation(w[pps.index]) ;
-      if (pps.check(path)) {
-        pps.add(path) ;
-        pps.update = true ;
-        flag = true ;
+  boolean check(Vector u) {
+    for (Vector v = this.follow ; v != this ; v = v.follow) {
+      if(v.index == u.index) {
+        int status = v.dominate(u.pathweight) ;
+        if (status <= 1) return false ;
+        if (status == 2)
+          v.remove() ;
       }
-    }
-    return flag ;
-  }
-  int leng() {
-    int count = 0 ;
-    for(Vector s = dummy.follow ; s != dummy ; s = s.follow)
-      count++ ;
-    return count ;
-  }
-  boolean check(int[] u) {
-    for (Vector v = dummy.follow ; v != dummy ; v = v.follow) {
-      int status = v.dominate(u) ;
-      if (status <= 1) return false ;
-      if (status == 2)
-        v.remove() ;
     }
     return true ;
   }
-  void reset() {
-    dummy.clear() ;
+  int leng() {
+    int count = 0 ;
+    for(Vector s = this.follow ; s != this ; s = s.follow)
+      count++ ;
+    return count ;
   }
 }

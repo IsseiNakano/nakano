@@ -1,48 +1,42 @@
 class ParetoSolution {
   int[][][] weight ;
-  PathVec[] pareto ;
+  Vector pareto1 ;
+  Vector pareto2 ;
    ParetoSolution(int[] m) {
     weight = instanceText(m) ;
-    // weight = randomWeight() ;
-    pareto = new PathVec[nodenum] ;
-    for(int j = 0 ; j < nodenum ; j++)  pareto[j] = new PathVec(j, weight[j]) ;
+    pareto1 = new Vector() ;
+    pareto2 = new Vector() ;
   }
-   int bellmanford() {
+   int polynomialup() {
     reset() ;
     int start = millis() ;
-    pareto[0].add(new int[objective]) ;
-    pareto[0].update = true ;
-    boolean flag = true ;
-    while(flag) {
-      flag = false ;
-      for(PathVec ps : pareto) {
-        for(PathVec pps : pareto)
-          if(ps.index != pps.index)
-          if(ps.paretoConstruction(pps)) flag = true ;
-        ps.update = false ;
+    pareto2.add(new Vector(new int[objective] , 0)) ;
+    while(!pareto2.isEmpty()) {
+      Vector s = pareto2.follow ;
+      s.remove() ;
+      // if(pareto1.check(s))
+        pareto1.add(s) ;
+      for(int i = 0 ; i < nodenum ; i++) {
+        Vector x = new Vector(s.calculation(weight[s.index][i]) , i) ;
+        if(pareto1.check(x))
+          if(pareto2.check(x))
+            pareto2.add(x) ;
       }
     }
     return millis() - start ;
   }
    void reset() {
-    for (PathVec vs : pareto) {
-      vs.reset() ;
-    }
+     pareto1.clear() ;
+     pareto2.clear() ;
   }
-   void update() {
+   void polynomial() {
     int time = Integer.MAX_VALUE ; ;
     for(int i = 0 ; i < experimentNum ; i++) {
-      int times = bellmanford() ;
+      int times = polynomialup() ;
       time = min(time, times) ;
       println(times) ;
     }
-    println(leng()+","+time) ;
-  }
-   int leng() {
-    int count = 0 ;
-    for(PathVec ps : pareto)
-     count += ps.leng() ;
-    return count ;
+    println(pareto1.leng()+","+time) ;
   }
    int[][][] instanceText(int[] m) {
     int[][][] weight = new int[nodenum][nodenum][objective] ;
@@ -57,15 +51,4 @@ class ParetoSolution {
     }
     return weight ;
   }
-   int[][][] randomWeight() {
-    int[][][] weight = new int[nodenum][nodenum][objective] ;
-    for (int k = 0 ; k < nodenum ; k++) {
-      for(int i = 0 ; i < nodenum ; i++){
-        for(int j = 0 ; j < objective; j++) {
-          weight[k][i][j] = int(random(bound)) ;
-        }
-      }
-    }
-    return weight ;
-  }
- }
+}
