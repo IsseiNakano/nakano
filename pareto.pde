@@ -1,33 +1,36 @@
 class ParetoSolution {
   int[][][] weight ;
   Vector pareto1 ;
-  Vector pareto2 ;
    ParetoSolution(int[] m) {
     weight = instanceText(m) ;
     pareto1 = new Vector() ;
-    pareto2 = new Vector() ;
   }
    int polynomialup() {
     reset() ;
     int start = millis() ;
-    pareto2.add(new Vector(new int[objective] , 0)) ;
-    while(!pareto2.isEmpty()) {
-      Vector s = pareto2.follow ;
-      s.remove() ;
-      // if(pareto1.check(s))
-        pareto1.add(s) ;
+    pareto1.add(new Vector(new int[objective] , 0)) ;
+    while(true) {
+      boolean flag = false ;
       for(int i = 0 ; i < nodenum ; i++) {
-        Vector x = new Vector(s.calculation(weight[s.index][i]) , i) ;
-        if(pareto1.check(x))
-          if(pareto2.check(x))
-            pareto2.add(x) ;
+        // Vector pareto2 = (Vector)pareto1.clone() ;
+        for(Vector s = pareto1.follow ; s != pareto1 ; s = s.follow) {
+          if(s.index == i) {
+            for(int j = 0 ; j < nodenum ; j++) {
+              Vector x = new Vector(s.calculation(weight[i][j]) , j) ;
+              if(pareto1.check(x)) {
+                pareto1.add(x) ;
+                flag = true ;
+              }
+            }
+          }
+        }
       }
+      if(!flag) break ;
     }
     return millis() - start ;
   }
    void reset() {
      pareto1.clear() ;
-     pareto2.clear() ;
   }
    void polynomial() {
     int time = Integer.MAX_VALUE ; ;
