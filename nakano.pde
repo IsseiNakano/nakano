@@ -12,6 +12,8 @@ void setup() {
 // dir = "../../data/" ;
   int[] m = {0,1,2} ;
   ParetoSolution p = new ParetoSolution(m) ;
+  p.dijkstra() ;
   p.polynomial() ;
+  p.labeling() ;
   exit() ;
 }
