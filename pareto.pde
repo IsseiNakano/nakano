@@ -3,10 +3,9 @@ class ParetoSolution {
   int[][][] weight1 ;
   PathVec[] pareto ;
   LabelSolution[] pareto1 ;
-   ParetoSolution(int[] m) {
-    weight = instanceText(m) ;
-    weight1 = instanceText1(m) ;
-    // weight = randomWeight() ;
+   ParetoSolution() {
+    randomWeight() ;
+    // instancetext() ;
     pareto = new PathVec[nodenum] ;
     for(int j = 0 ; j < nodenum ; j++)  pareto[j] = new PathVec(j, weight[j]) ;
     pareto1 = new LabelSolution[nodenum] ;
@@ -150,7 +149,7 @@ class ParetoSolution {
     }
   }
   int times = millis() - start ;
-  println(solutionSize(empty)) ;
+  // println(solutionSize(empty)) ;
   return times ;
 }
 int[] orderReset() {
@@ -234,38 +233,37 @@ int solutionSize(boolean[] empty) {
       vs.reset() ;
     }
   }
-   void update1() {
+   int update1() {
     int time = Integer.MAX_VALUE ; ;
     for(int i = 0 ; i < experimentNum ; i++) {
       int times = bellmanford1() ;
       time = min(time, times) ;
-      // println(times) ;
     }
-    println(leng()+","+time) ;
+    return time ;
   }
-  void update2() {
+  int update2() {
    int time = Integer.MAX_VALUE ; ;
    for(int i = 0 ; i < experimentNum ; i++) {
      int times = bellmanford2() ;
      time = min(time, times) ;
    }
-   println(leng()+","+time) ;
+   return time ;
  }
- void update3() {
+ int update3() {
   int time = Integer.MAX_VALUE ; ;
   for(int i = 0 ; i < experimentNum ; i++) {
     int times = bellmanford3() ;
     time = min(time, times) ;
   }
-  println(leng()+","+time) ;
+  return time ;
 }
-void update4() {
+int update4() {
  int time = Integer.MAX_VALUE ; ;
  for(int i = 0 ; i < experimentNum ; i++) {
    int times = bellmanford4() ;
    time = min(time, times) ;
  }
- println(leng4()+","+time) ;
+ return time ;
 }
 int leng4() {
     int count = 0 ;
@@ -279,42 +277,15 @@ int leng4() {
      count += ps.leng() ;
     return count ;
   }
-   int[][][] instanceText(int[] m) {
-    int[][][] weight = new int[nodenum][nodenum][objective] ;
-    for (int k = 0 ; k < m.length ; k++) {
-      String[] lines = loadStrings(dir + "weight_" + nodenum + "_" + bound + "_" + m[k] + ".csv");
-      for(int i = 0 ; i < nodenum ; i++){
-        String[] values = split(lines[i], ",") ;
-        for(int j = 0 ; j < nodenum ; j++) {
-          weight[j][i][k] = int(values[j]) ;
-        }
-      }
-    }
-    return weight ;
-  }
-  int[][][] instanceText1(int[] m) {
-   int[][][] weight = new int[nodenum][nodenum][objective] ;
-   for (int k = 0 ; k < m.length ; k++) {
-     String[] lines = loadStrings(dir + "weight_" + nodenum + "_" + bound + "_" + m[k] + ".csv");
-     for(int i = 0 ; i < nodenum ; i++){
-       String[] values = split(lines[i], ",") ;
-       for(int j = 0 ; j < nodenum ; j++) {
-         weight[i][j][k] = int(values[j]) ;
-       }
-     }
-   }
-   return weight ;
- }
 
-   int[][][] randomWeight() {
-    int[][][] weight = new int[nodenum][nodenum][objective] ;
-    for (int k = 0 ; k < nodenum ; k++) {
-      for(int i = 0 ; i < nodenum ; i++){
-        for(int j = 0 ; j < objective; j++) {
-          weight[k][i][j] = int(random(bound)) ;
+   void randomWeight() {
+    weight = new int[nodenum][nodenum][objective] ;
+    weight1 = new int[nodenum][nodenum][objective] ;
+    for (int i = 0 ; i < nodenum ; i++)
+      for(int j = 0 ; j < nodenum ; j++)
+        for(int k = 0 ; k < objective; k++) {
+          weight[j][i][k] = int(random(bound)) ;
+          weight1[i][j][k] = int(random(bound)) ;
         }
-      }
-    }
-    return weight ;
   }
  }

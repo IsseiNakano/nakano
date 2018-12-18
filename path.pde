@@ -6,6 +6,7 @@ class Vector {
     pre = this ;
     follow = this ;
   }
+  
   Vector(int[] weight) {
     pathweight = weight ;
   }

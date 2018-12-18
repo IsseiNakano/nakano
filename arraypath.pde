@@ -5,6 +5,7 @@ class Label {
   Label(int[] w) {
     pathweight = w ;
   }
+  
   int[] calculation(int[] weight) {
     int[] value = new int[objective];
     for(int i = 0 ; i < objective ; i++)
