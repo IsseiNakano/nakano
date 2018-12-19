@@ -1,15 +1,15 @@
-class Vector1 {
+class Vector {
   int[] pathweight ;
-  Vector1 pre ;
-  Vector1 follow ;
-  Vector1() {
+  Vector pre ;
+  Vector follow ;
+  Vector() {
     pre = this ;
     follow = this ;
   }
-  Vector1(int[] weight) {
+  Vector(int[] weight) {
     pathweight = weight ;
   }
-  void add(Vector1 a) {
+  void add(Vector a) {
     a.pre = this ;
     follow.pre = a ;
     a.follow = follow ;
@@ -26,7 +26,7 @@ class Vector1 {
   boolean isEmpty(){
     return follow == this ;
   }
-  void addAll(Vector1 a, Vector1 b) {
+  void addAll(Vector a, Vector b) {
     pre.follow = a ;
     a.pre = pre ;
     pre = b ;
@@ -49,67 +49,43 @@ class Vector1 {
     return status ;
   }
   boolean check(int[] u) {
-    for (Vector1 v = follow ; v != this ; v = v.follow) {
+    for (Vector v = follow ; v != this ; v = v.follow) {
       int status = v.dominate(u) ;
       if (status <= 1) return false ;
-      if (status == 2) v.remove() ;
+      if (status == 2) {
+        removecount++ ;
+        v.remove() ;
+      }
     }
     return true ;
   }
-  boolean eqweight(int[] u) {
-  for(int i = 0 ; i < objective ; i++)
-    if(pathweight[i] != u[i])
-      return false ;
-  return true ;
 }
-boolean addInt(int[] u) {
-  for(Vector1 v = follow ; v != this ; v = v.follow)
-    if(v.eqweight(u))
-      return false ;
-  return true ;
-}
-boolean domi(int[] u) {
-  for(Vector1 v = follow ; v != this ; v = v.follow)
-    if(!v.domimi(u)) return false ;
-  return true ;
-}
-boolean domimi(int[] u) {
-  for(int i = 0 ; i < objective ; i++)
-    if(pathweight[i] > u[i])
-      return true ;
-  return false ;
-}
-}
-
-class PathVec1 {
-  Vector1 dummy ;
+ class PathVec {
+  Vector dummy ;
   int index ;
   int[][] w ;
-  Vector1 upd ;
-  Vector1 vs ;
-  int mini ;
-  PathVec1 minipre ;
-  PathVec1() {
+  Vector upd ;
+  Vector vs ;
+  PathVec() {
   }
-  PathVec1(int i, int[][] wei) {
+  PathVec(int i, int[][] wei) {
     index = i ;
     w = wei ;
-    dummy = new Vector1() ;
-    upd = new Vector1() ;
-    vs = new Vector1() ;
-    minipre = sss ;
+    dummy = new Vector() ;
+    upd = new Vector() ;
+    vs = new Vector() ;
   }
   void add(int[] wei) {
-    dummy.pre.add(new Vector1(wei)) ;
+    dummy.pre.add(new Vector(wei)) ;
   }
-  boolean paretoConstruction(PathVec1 pps) {
+  boolean paretoConstruction(PathVec pps) {
     boolean flag = false ;
-    for(Vector1 s = pps.upd.follow ; s != pps.upd ; s = s.follow) {
+    for(Vector s = pps.upd.follow ; s != pps.upd ; s = s.follow) {
       int[] path = s.calculation(w[pps.index]) ;
       if (dummy.check(path))
       if (upd.check(path))
       if (vs.check(path)) {
-        vs.add(new Vector1(path)) ;
+        vs.add(new Vector(path)) ;
         flag = true ;
       }
     }
@@ -117,7 +93,7 @@ class PathVec1 {
   }
   int leng() {
     int count = 0 ;
-    for(Vector1 s = dummy.follow ; s != dummy ; s = s.follow)
+    for(Vector s = dummy.follow ; s != dummy ; s = s.follow)
       count++ ;
     return count ;
   }
@@ -135,24 +111,5 @@ class PathVec1 {
     dummy.clear() ;
     upd.clear() ;
     vs.clear() ;
-  }
-  int negativeCycleCheck(PathVec1 pps, int k) {
-    if(mini > pps.mini + w[pps.index][k]) {
-      mini = pps.mini + w[pps.index][k] ;
-      if(minipre == pps) return 3 ;
-      minipre = pps ;
-      return 2 ;
-    }
-    return 1 ;
-  }
-  void removeObject(int k) {
-    for(int i = 0 ; i < w.length ; i++)
-      w[i][k] = 0 ;
-  }
-  void miniZero() {
-    mini = 0 ;
-  }
-  void miniClear() {
-    mini = maxint ;
   }
 }
